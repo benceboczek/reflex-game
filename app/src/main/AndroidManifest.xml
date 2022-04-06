@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Reflex_game">
         <activity
+            android:name=".ToplistActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
