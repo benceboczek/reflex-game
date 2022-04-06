@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">reflex_game</string>
+    <string name="username">Felhasználónév</string>
+    <string name="password">Jelszó</string>
+    <string name="play">Játék</string>
+    <string name="register">Regisztráció</string>
+    <string name="reflex_game">Reflex játék</string>
+    <string name="noreg_play">Játék regisztráció nélkül</string>
+</resources>
