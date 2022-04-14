@@ -2,7 +2,9 @@ package com.example.reflex_game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -11,6 +13,10 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         getSupportActionBar().hide();
+    }
 
+    public void goToRanklist(View view) {
+        Intent intent = new Intent(this, ToplistActivity.class);
+        startActivity(intent);
     }
 }

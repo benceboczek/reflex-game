@@ -1,9 +1,13 @@
 <resources>
-    <string name="app_name">reflex_game</string>
+    <string name="app_name">Reflex Játék</string>
     <string name="username">Felhasználónév</string>
     <string name="password">Jelszó</string>
     <string name="play">Játék</string>
     <string name="register">Regisztráció</string>
     <string name="reflex_game">Reflex játék</string>
     <string name="noreg_play">Játék regisztráció nélkül</string>
+    <string name="email">E-Mail cím</string>
+    <string name="passwordagain">Jelszó újra</string>
+    <string name="mobilenumber">Telefonszám</string>
+    <string name="m_gse">Mégse</string>
 </resources>
