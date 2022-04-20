@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,18 +7,37 @@
     tools:context=".GameActivity"
     android:background="@drawable/wallpaper">
 
+
     <ImageView
-        android:id="@+id/ranklist_icon"
+        android:id="@+id/toplist_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:onClick="goToRanklist"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@drawable/ranklist_icon" />
+        android:layout_marginTop="620dp"
+        android:layout_marginLeft="320dp"
+        app:srcCompat="@drawable/ranklist_icon"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/touch_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:onClick="gameTouch"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/ranklist_icon2"
+        tools:ignore="UsingOnClickInXml" />
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        android:layout_marginTop="10dp"
+        android:textSize="48dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"/>
+
+
+
+
+</RelativeLayout>

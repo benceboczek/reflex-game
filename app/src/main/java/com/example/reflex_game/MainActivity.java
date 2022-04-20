@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean anonym = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +58,22 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
+    //ha a user be van jelentkezve akkor az onDestroy lifecycle-ben kijelentkezteti a rendszer
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mAuth.getCurrentUser() != null) {
+            mAuth.signOut();
+        }
 
+    }
 
+    //bejelentkezés megvalósítása
     public void play(View view) {
         String userName = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
+        //ha nincs meg a 4 karakter akkor egy toastot küldünk
         if(userName.length() < 4 || password.length() < 4){
             Toast.makeText(MainActivity.this, "Túl rövid!", Toast.LENGTH_LONG).show();
             return;
@@ -69,9 +81,12 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth.signInWithEmailAndPassword(userName, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
+
             public void onComplete(@NonNull Task<AuthResult> task) {
+                //ha sikeres az auth akkor intentet kapunk a GameActivity-re
                 if (task.isSuccessful()) {
                     goToGame();
+                //ha nem sikeres akkor alertet küldünk
                 } else {
                     wrongPwAlert();
                 }
@@ -81,11 +96,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //intent a játék gombra
     public void goToGame(){
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
 
+    //felugró ablak megvalósítása
     public void wrongPwAlert(){
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
 
@@ -103,11 +120,14 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    //intent a regisztráció gombra
     public void register(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 
+    //bejelentkezés regisztráció nélkül
     public void anonymRegister(View view) {
         mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
