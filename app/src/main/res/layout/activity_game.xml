@@ -18,6 +18,17 @@
         app:srcCompat="@drawable/ranklist_icon"/>
 
     <ImageView
+        android:id="@+id/play_icon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:onClick="play"
+        android:layout_marginTop="620dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/play_button"/>
+
+
+    <ImageView
         android:id="@+id/touch_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -25,7 +36,11 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/ranklist_icon2"
-        tools:ignore="UsingOnClickInXml" />
+        tools:ignore="UsingOnClickInXml"
+        android:visibility="gone"/>
+    />
+
+
 
     <TextView
         android:id="@+id/points"
