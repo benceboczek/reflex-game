@@ -59,15 +59,29 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void gameManager(){
-        gameTimer(delay);
+        if(points <= 5) {
+            gameTimer((int)(Math.random() * ((1400 - 800) + 1)) + 800);
+        }
+        else if(points > 5 && points <= 10){
+            gameTimer((int)(Math.random() * ((1100 - 700) + 1)) + 700);
+        }
+        else if(points > 10 && points <= 17){
+            gameTimer((int)(Math.random() * ((900 - 600) + 1)) + 600);
+        }
+        else if(points > 17 && points <= 25){
+            gameTimer((int)(Math.random() * ((800 - 500) + 1)) + 500);
+        }
+        else if(points > 25) {
+            gameTimer((int)(Math.random() * ((700 - 400) + 1)) + 400);
+        }
+
     }
 
     public void play(View view){
         isGameStarted = true;
         gameTouch(view);
         startImage.setVisibility(View.GONE);
-        gameImage.setVisibility(View.VISIBLE);
-
+        gameImage.setVisibility(View.GONE);
     }
 
 
@@ -92,7 +106,7 @@ public class GameActivity extends AppCompatActivity {
             public void run() {
                 if(isGameStarted) {
                     counter++;
-                    handler.postDelayed(this, delay);
+                    handler.postDelayed(this, milis);
                     randomizePosition();
                     if (points != counter) {
                         counter--;
@@ -108,7 +122,7 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
             }
-        }, delay);
+        }, 2000);
     }
 
     public void manageDeath(){
