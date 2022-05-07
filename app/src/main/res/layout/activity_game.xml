@@ -28,6 +28,7 @@
         app:srcCompat="@drawable/play_button"/>
 
 
+
     <ImageView
         android:id="@+id/touch_icon"
         android:layout_width="48dp"
@@ -35,22 +36,21 @@
         android:onClick="gameTouch"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/ranklist_icon2"
+        app:srcCompat="@drawable/crosshair"
         tools:ignore="UsingOnClickInXml"
         android:visibility="gone"/>
     />
-
 
 
     <TextView
         android:id="@+id/points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/_0"
-        android:layout_marginTop="10dp"
-        android:textSize="48dp"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/white"/>
+        android:layout_marginTop="10dp"
+        android:text="@string/_0"
+        android:textColor="@color/white"
+        android:textSize="48dp" />
 
 
 

@@ -7,13 +7,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,9 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class GameActivity extends AppCompatActivity {
 
@@ -38,13 +34,11 @@ public class GameActivity extends AppCompatActivity {
     private int points = 0;
     private int lives = 3;
     private TextView pointTextView;
-    private Runnable runnable;
-    final int delay = 2000;
     private Handler handler;
     private long counter = 0;
     private int highscore = 0;
     private FirebaseFirestore db;
-    EditText emailEditText;
+    private TextView scoreText;
 
 
 
@@ -59,6 +53,7 @@ public class GameActivity extends AppCompatActivity {
         startImage = (ImageView) findViewById(R.id.play_icon);
         db = FirebaseFirestore.getInstance();
         handler = new Handler();
+        scoreText = findViewById(R.id.points);
         gameManager();
 
     }
@@ -125,6 +120,7 @@ public class GameActivity extends AppCompatActivity {
                     if (points != counter) {
                         counter--;
                         lives -= 1;
+                        animateScore();
                     }
 
                     Log.d("GameActivity", "points: " + points + "lives: " + lives + "counter: " + counter);
@@ -146,7 +142,7 @@ public class GameActivity extends AppCompatActivity {
         Log.d("GameActivity", email);
 
 
-        if(email == null || email == "") {
+        if(email == null || email.equals("")) {
             userHighscore.put("email", "anonym");
         }
         else{
@@ -190,6 +186,13 @@ public class GameActivity extends AppCompatActivity {
 
         alertDialog.show();
         updateDb();
+    }
+
+    public void animateScore(){
+        Animation animation;
+        animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.simple_anim);
+        scoreText.startAnimation(animation);
     }
 
     public void restartGame(){

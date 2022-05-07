@@ -11,4 +11,5 @@
     <string name="mobilenumber">Telefonszám</string>
     <string name="m_gse">Mégse</string>
     <string name="_0">0</string>
+    <string name="fejleszt_s_alatt">Fejlesztés alatt! :(</string>
 </resources>

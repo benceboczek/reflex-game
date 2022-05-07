@@ -1,16 +1,26 @@
 package com.example.reflex_game;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,16 +38,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREF_KEY = MainActivity.class.getPackage().toString();
     private static final String LOG_TAG = MainActivity.class.getName();
 
-
     EditText emailEditText;
     EditText passwordEditText;
-
+    TextView gameText;
+    AlarmManager mAlarmManager;
 
     private SharedPreferences preferences;
     private GoogleSignInClient mGoogleSignInClient;
 
-
-    private boolean anonym = false;
 
 
     @Override
@@ -45,18 +53,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
         mAuth = FirebaseAuth.getInstance();
         emailEditText = findViewById(R.id.editTextUserName);
         passwordEditText = findViewById(R.id.editTextPassword);
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
+        gameText = findViewById(R.id.gameText);
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("298873370929-4mkutaepkd6o4m2svp8t0k8e59cerfv5.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        permissionRequest();
+        //setAlarmManager();
     }
+
+
 
     //ha a user be van jelentkezve akkor az onDestroy lifecycle-ben kijelentkezteti a rendszer
     @Override
@@ -68,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     //bejelentkezés megvalósítása
     public void play(View view) {
         String userName = emailEditText.getText().toString();
@@ -75,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ha nincs meg a 4 karakter akkor egy toastot küldünk
         if(userName.length() < 4 || password.length() < 4){
-            Toast.makeText(MainActivity.this, "Túl rövid!", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Túl rövid azonosítók!", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -134,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    anonym = true;
                     goToGame();
                 } else {
                     wrongPwAlert();
@@ -144,8 +157,65 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void permissionRequest(){
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)){
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                }else{
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                }
+            }
+
+        }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {}
+                }
+                return;
+            }
+        }
+    }
+
+    //animáció megvalósítása
+    public void animateGameText(View view) {
+        Animation animation;
+        animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.simple_anim);
+        gameText.startAnimation(animation);
+    }
+
+    private void setAlarmManager() {
+        long repeatInterval = AlarmManager.INTERVAL_DAY;
+        long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+
+        Intent intent = new Intent(this, RecieveScheduler.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        mAlarmManager.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                triggerTime,
+                repeatInterval,
+                pendingIntent);
+
+
+        mAlarmManager.cancel(pendingIntent);
+    }
+
     public EditText getEmail(){
         return this.emailEditText;
     }
+
 
 }
