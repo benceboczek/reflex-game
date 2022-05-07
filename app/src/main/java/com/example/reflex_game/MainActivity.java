@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static final String PREF_KEY = MainActivity.class.getPackage().toString();
-    private static final String LOG_TAG = MainActivity.class.getName();
 
     EditText emailEditText;
     EditText passwordEditText;

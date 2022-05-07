@@ -138,8 +138,12 @@ public class GameActivity extends AppCompatActivity {
     public void updateDb(){
         long highscore = getHighscore();
         Map<String,Object> userHighscore = new HashMap<>();
-        String email = getIntent().getExtras().getString("email");
-        Log.d("GameActivity", email);
+        String email;
+        try {
+            email = getIntent().getExtras().getString("email");
+        }catch (Exception e){
+            email = "anonym";
+        }
 
 
         if(email == null || email.equals("")) {
