@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("298873370929-4mkutaepkd6o4m2svp8t0k8e59cerfv5.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     //intent a játék gombra
     public void goToGame(){
         Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra ( "email", emailEditText.getText().toString() );
         startActivity(intent);
     }
 
@@ -142,4 +143,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    public EditText getEmail(){
+        return this.emailEditText;
+    }
+
 }

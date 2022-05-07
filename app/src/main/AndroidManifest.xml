@@ -11,9 +11,11 @@
         android:theme="@style/Theme.Reflex_game">
         <activity
             android:name=".ToplistActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".GameActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"

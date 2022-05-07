@@ -1,5 +1,6 @@
 package com.example.reflex_game;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -12,10 +13,19 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,6 +43,9 @@ public class GameActivity extends AppCompatActivity {
     private Handler handler;
     private long counter = 0;
     private int highscore = 0;
+    private FirebaseFirestore db;
+    EditText emailEditText;
+
 
 
 
@@ -44,6 +57,7 @@ public class GameActivity extends AppCompatActivity {
         pointTextView = (TextView) findViewById(R.id.points);
         gameImage = (ImageView) findViewById(R.id.touch_icon);
         startImage = (ImageView) findViewById(R.id.play_icon);
+        db = FirebaseFirestore.getInstance();
         handler = new Handler();
         gameManager();
 
@@ -60,19 +74,19 @@ public class GameActivity extends AppCompatActivity {
 
     public void gameManager(){
         if(points <= 5) {
-            gameTimer((int)(Math.random() * ((1400 - 800) + 1)) + 800);
+            gameTimer((int)(Math.random() * ((1000 - 700) + 1)) + 700);
         }
         else if(points > 5 && points <= 10){
-            gameTimer((int)(Math.random() * ((1100 - 700) + 1)) + 700);
+            gameTimer((int)(Math.random() * ((800 - 600) + 1)) + 600);
         }
         else if(points > 10 && points <= 17){
-            gameTimer((int)(Math.random() * ((900 - 600) + 1)) + 600);
+            gameTimer((int)(Math.random() * ((700 - 400) + 1)) + 400);
         }
         else if(points > 17 && points <= 25){
-            gameTimer((int)(Math.random() * ((800 - 500) + 1)) + 500);
+            gameTimer((int)(Math.random() * ((600 - 300) + 1)) + 300);
         }
         else if(points > 25) {
-            gameTimer((int)(Math.random() * ((700 - 400) + 1)) + 400);
+            gameTimer((int)(Math.random() * ((500 - 200) + 1)) + 200);
         }
 
     }
@@ -125,6 +139,39 @@ public class GameActivity extends AppCompatActivity {
         }, 2000);
     }
 
+    public void updateDb(){
+        long highscore = getHighscore();
+        Map<String,Object> userHighscore = new HashMap<>();
+        String email = getIntent().getExtras().getString("email");
+        Log.d("GameActivity", email);
+
+
+        if(email == null || email == "") {
+            userHighscore.put("email", "anonym");
+        }
+        else{
+            userHighscore.put("email", email);
+        }
+        userHighscore.put("highscore", getPoints());
+
+        db.collection("highscore")
+                .add(userHighscore)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(GameActivity.this, "Rekord frissítve", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(GameActivity.this, "Nem sikerült frissíteni a rekordot", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
     public void manageDeath(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -142,6 +189,7 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
 
         alertDialog.show();
+        updateDb();
     }
 
     public void restartGame(){
